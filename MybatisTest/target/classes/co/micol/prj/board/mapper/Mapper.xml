@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="co.micol.prj.board.mapper.Mapper">
+	<select id="boardList"
+		resultType="co.micol.prj.board.vo.BoardVO">
+		SELECT * FROM TBL_BOARD ORDER BY BOARD_NO DESC
+	</select>
+
+	<select id="boardSelect"
+		resultType="co.micol.prj.board.vo.BoardVO">
+		SELECT * FROM TBL_BOARD
+		WHERE BOARD_NO = #{boardNo}
+	</select>
+
+	<insert id="boardInsert"
+		parameterType="co.micol.prj.board.vo.BoardVO">
+		<selectKey keyProperty="boardNo" resultType="int" order="BEFORE">
+			SELECT BOARD_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO TBL_BOARD
+		VALUES(#{boardNo},#{title},#{content},#{writer},
+		SYSDATE, 0 , '')
+	</insert>
+
+	<select id="replyList"
+		resultType="co.micol.prj.board.vo.ReplyVO">
+		SELECT * FROM TBL_REPLY ORDER BY REPLY_NO DESC
+	</select>
+
+	<insert id="replyInsert"
+		parameterType="co.micol.prj.board.vo.ReplyVO">
+		INSERT INTO TBL_REPLY
+		VALUES(#{replyNo},#{boardNo},#{replyContent},#{replyWriter}, SYSDATE)
+	</insert>
+
+	<delete id="replyDelete"
+		parameterType="co.micol.prj.board.vo.ReplyVO">
+		DELETE FROM TBL_REPLY WHERE REPLY_NO = #{replyNo}
+	</delete>
+</mapper>
