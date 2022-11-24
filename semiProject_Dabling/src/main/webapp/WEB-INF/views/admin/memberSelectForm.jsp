@@ -1,0 +1,105 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<!-- 회원명 부분 폰트 -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+	<!-- 나머지 글자 폰트 -->
+	<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR&display=swap" rel="stylesheet">
+	<!-- table css -->
+	<link href="assets/css/table.css" rel="stylesheet">
+	<style>
+	</style>
+</head>
+
+<body>
+	<div class="img">
+		<div class="content">
+			<h1>회원정보조회</h1>
+		</div>
+	</div>
+	<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+	<div class="tbl-header">
+		<table id="myTable">
+			<thead>
+				<tr class="header">
+					<th>회원번호</th>
+					<th>이메일</th>
+					<th>비밀번호</th>
+					<th>이름</th>
+					<th>전화번호</th>
+					<th>사업자번호</th>
+					<th>분류</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach items="${members }" var="m">
+					<tr>
+						<td>${m.memberCode }</td>
+						<td>${m.email }</td>
+						<td>${m.password }</td>
+						<td>${m.name }</td>
+						<td>${m.phone }</td>
+						<td>${m.businessNum }</td>
+						<td>
+							<c:if test="${m.author == '1'}">일반회원</c:if>
+							<c:if test="${m.author == '2'}">사업자회원</c:if>
+							<c:if test="${m.author == '9'}">관리자</c:if>
+						</td>
+					</tr>
+				</c:forEach>
+			</tbody>
+		</table>
+	</div>
+	<p />
+
+	<div class='pagination'>
+		<c:if test="${page.prev }">
+			<a class='active' href="memberSelectForm.do?page=${page.startPage- 1}">&laquo;</a>
+		</c:if>
+		<c:forEach var="i" begin="${page.startPage }" end="${page.endPage }" step="1">
+			<c:choose>
+				<c:when test="${page.pageNum == i }">
+					<a class='active' href="memberSelectForm.do?page=${i }"> ${i }</a>
+				</c:when>
+				<c:otherwise>
+					<a href="memberSelectForm.do?page=${i }"> ${i }</a>
+				</c:otherwise>
+			</c:choose>
+		</c:forEach>
+		<c:if test="${page.next }">
+			<a class='active' href="memberSelectForm.do?page=${page.endPage + 1}">&raquo;</a>
+		</c:if>
+	</div>
+	<script>
+		function myFunction() {
+			var input, filter, table, tr, td, i, txtValue;
+			input = document.getElementById("myInput");
+			filter = input.value.toUpperCase();
+			table = document.getElementById("myTable");
+			tr = table.getElementsByTagName("tr");
+			for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[3];
+
+				if (td) {
+					txtValue = td.textContent || td.innerText;
+					if (txtValue.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}
+				}
+
+			}
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.dabling.msp.notice.mapper.NoticeMapper">
+	<!-- 공지사항 전체목록 -->
+	<select id="noticeSelectList"
+		resultType="co.dabling.msp.notice.vo.NoticeVO">
+		SELECT * FROM NOTICE ORDER BY NOTICE_CODE DESC
+	</select>
+
+	<!-- 공지사항 1건 상세조회 -->
+	<select id="noticeSelect"
+		resultType="co.dabling.msp.notice.vo.NoticeVO">
+		SELECT * FROM NOTICE WHERE NOTICE_CODE = #{noticeCode}
+	</select>
+
+	<!-- 공지사항 입력 -->
+	<insert id="noticeInsert">
+		INSERT INTO NOTICE(NOTICE_CODE,TITLE,CONT)
+		VALUES(notice_code_seq.nextval,#{title},#{cont})
+	</insert>
+	<!-- 공지사항 수정 -->
+	<update id="noticeUpdate">
+		UPDATE NOTICE
+		SET TITLE = #{title}, CONT = #{cont}
+		WHERE NOTICE_CODE = #{noticeCode}
+	</update>
+	<!-- 공지사항 삭제 -->
+	<delete id="noticeDelete">
+		DELETE NOTICE WHERE NOTICE_CODE = #{noticeCode}
+	</delete>
+</mapper>

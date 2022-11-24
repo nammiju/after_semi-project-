@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.dabling.msp.menu.mapper.MenuMapper">
+
+
+	<!-- 차후에 가격별,메뉴별,매장별 order by 정렬 수정. -->
+	<!-- 메뉴 전체조회 -->
+	<select id="menuSelectList"
+		resultType="co.dabling.msp.menu.vo.MenuVO">
+		SELECT * FROM MENU
+	</select>
+
+	<!-- 메뉴별 전체 조회 -->
+	<select id="menuSelect"
+		resultType="co.dabling.msp.menu.vo.MenuVO">
+		SELECT * FROM MENU
+		WHERE MENU_NAME = #{menuName}
+	</select>
+
+
+	<!-- 매장별메뉴 전체 조회 -->
+	<select id="storeMenuSelect"
+		resultType="co.dabling.msp.menu.vo.MenuVO">
+		SELECT A.STORE_CODE, B.MENU_NAME,MENU_IMAGE,B.PRICE
+		FROM
+		STORES A
+		LEFT JOIN MENU B
+		ON A.STORE_CODE = B.STORE_CODE
+		WHERE
+		A.STORE_CODE = #{storeCode}
+	</select>
+
+	<!-- 메뉴 추가 -->
+	<insert id="menuInsert">
+		INSERT INTO
+		MENU(STORE_CODE,MENU_NAME,MENU_IMAGE,MENU_IMAGE_RENAME,PRICE)
+		VALUES(#{storeCode},#{menuName},#{menuImage},#{menuImageRename},#{price})
+	</insert>
+
+	<!-- 메뉴 수정 -->
+	<update id="menuUpdate">
+		UPDATE MENU
+		SET MENU_NAME =
+		NVL(#{menuNameRename},menu_name),
+		MENU_IMAGE = NVL(#{menuImage},menu_image),
+		MENU_IMAGE_RENAME = NVL(#{menuImageRename},menu_image_rename),
+		PRICE = NVL(#{price},price)
+		WHERE STORE_CODE = #{storeCode}
+		AND MENU_NAME =
+		#{menuName}
+	</update>
+
+	<!-- 메뉴 삭제 -->
+	<delete id="menuDelete">
+		DELETE MENU
+		WHERE MENU_NAME = #{menuName}
+	</delete>
+
+	<!-- 매장코드,메뉴명으로 1건조회(수정시조회할 쿼리) -->
+	<select id="storeMenuOnSelect"
+		resultType="co.dabling.msp.menu.vo.MenuVO">
+		select *
+		from menu
+		where store_code = #{storeCode}
+		and menu_name = #{menuName}
+	</select>
+</mapper>
+

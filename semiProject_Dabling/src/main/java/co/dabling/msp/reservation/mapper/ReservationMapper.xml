@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="co.dabling.msp.reservation.mapper.ReservationMapper">
+
+	<select id="memberReservationList"
+		resultType="co.dabling.msp.reservation.vo.ReservationVO">
+		SELECT * FROM RESERVATION WHERE MEMBER_CODE = #{memberCode}
+	</select>
+
+	<!-- <select id="businessReservationList" resultType="co.dabling.msp.reservation.vo.ReservationVO"> 
+		SELECT B.RESERVATION_CODE,A.MEMBER_CODE,A.NAME,A.PHONE,B.RESERVATION_DATE,B.RESERVATION_TIME,B.RESERVATION_PEOPLE 
+		FROM MEMBERS A RIGHT JOIN RESERVATION B ON A.MEMBER_CODE = B.MEMBER_CODE 
+		WHERE STORE_CODE = #{storeCode} ORDER BY B.RESERVATION_DATE DESC, B.RESERVATION_TIME 
+		ASC </select> -->
+
+	<select id="businessReservationList"
+		resultType="co.dabling.msp.reservation.vo.ReservationVO">
+		SELECT
+		C.CONTENT,B.STORE_CODE,B.RESERVATION_CODE,A.MEMBER_CODE,A.NAME,A.PHONE,B.RESERVATION_DATE,B.RESERVATION_TIME,B.RESERVATION_PEOPLE
+		FROM MEMBERS A
+		LEFT JOIN RESERVATION B
+		ON A.MEMBER_CODE = B.MEMBER_CODE
+		FULL JOIN REVIEW C
+		ON B.RESERVATION_CODE = C.RESERVATION_CODE
+		WHERE
+		B.STORE_CODE =
+		#{storeCode}
+		ORDER BY B.RESERVATION_DATE DESC,
+		B.RESERVATION_TIME ASC
+	</select>
+
+	<delete id="reservationCancel">
+		DELETE RESERVATION WHERE RESERVATION_CODE =
+		#{reservationCode}
+	</delete>
+
+	<insert id="reservationInsert">
+		INSERT INTO RESERVATION
+		VALUES
+		(RESERVATION_CODE_SEQ.NEXTVAL,
+		#{memberCode},#{storeCode},#{reservationDate},#{reservationTime},#{reservationPeople})
+	</insert>
+
+	<select id="storeReservationListSearch"
+		resultType="co.dabling.msp.reservation.vo.ReservationVO">
+		SELECT
+		C.CONTENT,B.RESERVATION_CODE,B.STORE_CODE,A.MEMBER_CODE,A.NAME,A.PHONE,B.RESERVATION_DATE,B.RESERVATION_TIME,B.RESERVATION_PEOPLE
+		FROM MEMBERS A
+		RIGHT JOIN RESERVATION B
+		ON A.MEMBER_CODE = B.MEMBER_CODE
+		FULL JOIN REVIEW C
+		ON B.RESERVATION_CODE = C.RESERVATION_CODE
+		WHERE B.STORE_CODE = #{storeCode}
+		AND b.RESERVATION_DATE BETWEEN #{firstDate} and #{lastDate}
+		ORDER BY B.RESERVATION_DATE DESC, B.RESERVATION_TIME ASC
+	</select>
+</mapper>

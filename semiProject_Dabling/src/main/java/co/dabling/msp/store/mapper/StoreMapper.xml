@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.dabling.msp.store.mapper.StoreMapper">
+	<!-- 전체 매장 리스트 -->
+	<select id="storeSelectList"
+		resultType="co.dabling.msp.store.vo.StoreVO">
+		SELECT * FROM STORES ORDER BY STORE_CODE DESC
+	</select>
+
+	<!-- 식당리스트 가져오기, column따라 다르게, all을 넣을경우 전체 다 column:storeName/storeRegion/storeCategory, 
+		searchKey: 검색어 -->
+	<select id="storeList"
+		resultType="co.dabling.msp.store.vo.StoreVO">
+		SELECT * FROM STORES
+		<choose>
+			<when test="column == 'storeName'"> WHERE STORE_NAME LIKE '%'||#{searchKey}||'%' ORDER
+				BY STORE_NAME
+			</when>
+			<when test="column == 'storeRegion'"> WHERE STORE_REGION LIKE '%'||#{searchKey}||'%'  ORDER
+				BY STORE_REGION
+			</when>
+			<when test="column == 'storeCategory'"> WHERE STORE_CATEGORY LIKE '%'||#{searchKey}||'%' 
+				ORDER BY  STORE_CATEGORY
+			</when>
+		</choose>
+	</select>
+
+	<!-- 매장1건조회 -->
+	<select id="storeSelect"
+		resultType="co.dabling.msp.store.vo.StoreVO">
+		SELECT
+		A.STORE_CODE,A.BUSINESS_NUM,A.STORE_NAME,A.STORE_REGION,A.STORE_CATEGORY,A.STORE_INFO,A.LAT,LNG,A.STORE_IMAGE,A.STORE_ADDRESS,
+		A.APPROVAL_STATE
+		FROM STORES A
+		LEFT JOIN MEMBERS B
+		ON A.BUSINESS_NUM =
+		B.BUSINESS_NUM
+		WHERE A.BUSINESS_NUM = #{businessNum}
+	</select>
+
+	<!-- 스토어코드로 매장조회 -->
+	<select id="storeSelectByCode"
+		resultType="co.dabling.msp.store.vo.StoreVO">
+		SELECT * FROM STORES WHERE STORE_CODE = #{storeCode}
+	</select>
+
+	<!-- 매장등록(승인신청) -->
+	<insert id="storeInsert">
+		INSERT INTO
+		STORES(STORE_CODE,STORE_NAME,STORE_REGION,STORE_CATEGORY,STORE_INFO,LAT,LNG,STORE_IMAGE,STORE_ADDRESS,business_num)
+		VALUES(storeCode_seq.nextval,#{storeName},#{storeRegion},#{storeCategory},#{storeInfo},#{lat},#{lng},#{storeImage},#{storeAddress},#{businessNum})
+	</insert>
+
+	<!-- 매장 등록 승인 -->
+	<update id="storeApproval">
+		UPDATE STORES
+		SET APPROVAL_STATE = 1
+		WHERE BUSINESS_NUM
+		= #{businessNum}
+	</update>
+
+	<!-- 매장 정보 수정 -->
+	<update id="storeUpdate">
+		UPDATE STORES
+		SET STORE_NAME =
+		NVL(#{storeName},STORE_NAME),
+		STORE_REGION =
+		NVL(#{storeRegion},STORE_REGION),
+		STORE_CATEGORY =
+		NVL(#{storeCategory},STORE_CATEGORY),
+		STORE_INFO =
+		NVL(#{storeInfo},STORE_INFO),
+		LAT = NVL(#{lat},LAT),
+		LNG =
+		NVL(#{lng},LNG),
+		STORE_IMAGE = NVL(#{storeImage},STORE_IMAGE),
+		STORE_IMAGE_RENAME = NVL(#{storeImageRename},STORE_IMAGE_RENAME),
+		STORE_ADDRESS = NVL(#{storeAddress},STORE_ADDRESS),
+		BUSINESS_NUM =
+		NVL(#{businessNum },BUSINESS_NUM)
+		WHERE BUSINESS_NUM = #{businessNum}
+	</update>
+
+	<!-- 매장 정보 삭제 -->
+	<delete id="storeDelete">
+		DELETE FROM STORES
+		WHERE BUSINESS_NUM = #{businessNum}
+	</delete>
+
+	<!-- 전체 row 수 카운트 -->
+	<select id="totalCnt" resultType="_int">
+		 SELECT NVL(COUNT(*), 0) AS CNT FROM  STORES
+	</select>
+
+	<!-- 페이지리스트 출력개수 12개로 변경 -->
+	<select id="pageList"
+		resultType="co.dabling.msp.store.vo.StoreVO">
+		SELECT B.*
+		FROM(SELECT ROWNUM RN, A.*
+		FROM (SELECT *
+		FROM STORES
+		ORDER BY
+		STORE_CODE DESC) A 
+		<![CDATA[WHERE ROWNUM <= #{pg} * 12) B]]>
+		WHERE B.RN >= (#{pg} -1) * 10 + 1
+	</select>
+	<!-- 페이지리스트 -->
+	<select id="pageApprovalList"
+		resultType="co.dabling.msp.store.vo.StoreVO">
+		SELECT B.*
+		FROM(SELECT ROWNUM RN, A.*
+		FROM (SELECT *
+		FROM STORES
+		ORDER BY
+		STORE_CODE DESC) A 
+		<![CDATA[WHERE ROWNUM <= #{pg} * 10 AND APPROVAL_STATE = 0) B]]>
+		WHERE B.RN >= (#{pg} -1) * 10 + 1 
+	</select>
+
+
+
+</mapper>
+

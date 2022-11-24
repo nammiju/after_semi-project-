@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.dabling.msp.liked.mapper.LikedMapper">
+
+	<!-- 값이 없으면 1(true)리턴. 있으면 0(false)리턴 -->
+	<select id="likeCheck" resultType="boolean">
+		SELECT CASE WHEN
+		COUNT(LIKE_CODE) = 1 THEN 0 ELSE 1 END AS LIKE_CODE
+		FROM LIKED WHERE
+		MEMBER_CODE = #{memberCode} AND STORE_CODE = #{storeCode}
+	</select>
+
+	<insert id="insertLike">
+		INSERT INTO LIKED VALUES (LIKE_CODE_SEQ.NEXTVAL,
+		#{memberCode}, #{storeCode})
+	</insert>
+
+	<update id="updateLike">
+		UPDATE LIKED SET LIKE_CODE = #{likeCode}
+		WHERE
+		MEMBER_CODE = #{memberCode} AND STORE_CODE = #{storeCode}
+	</update>
+
+	<delete id="deleteLike">
+		DELETE FROM LIKED WHERE MEMBER_CODE = #{memberCode}
+		AND STORE_CODE = #{storeCode}
+	</delete>
+
+	<select id="likeList"
+		resultType="co.dabling.msp.liked.vo.LikedVO">
+		select a.*,b.*,c.*
+		from liked a
+		left join members b
+		on a.member_code = b.member_code
+		left join stores c
+		on a.store_code = c.store_code
+		where b.member_code = #{memberCode}
+	</select>
+</mapper>

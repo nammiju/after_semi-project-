@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.dabling.msp.review.mapper.ReviewMapper">
+
+	<insert id="reviewInsert">
+		INSERT INTO REVIEW
+		VALUES(#{storeCode},REVIEW_NUM_SEQ.NEXTVAL,#{reservationCode},#{content},#{rate},SYSDATE)
+	</insert>
+
+	<select id="reviewSelectList"
+		resultType="co.dabling.msp.review.vo.ReviewVO">
+		SELECT * FROM REVIEW
+		<choose>
+			<when test="column == 'all'">ORDER BY REVIEW_NUM</when>
+			<when test="column == 'storeCode'"> WHERE STORE_CODE = #{number} ORDER BY STORE_CODE
+			</when>
+			<when test="column == 'rate'">WHERE RATE >= #{number} ORDER BY RATE </when>
+		</choose>
+	</select>
+
+</mapper>

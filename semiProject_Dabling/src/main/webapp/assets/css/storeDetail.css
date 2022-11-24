@@ -1,0 +1,149 @@
+@charset "UTF-8";
+
+li{
+	list-style: none;
+}
+
+.store-image, .store-info {
+	float: left;
+}
+
+.store-image {
+	margin-left: 20%;
+}
+
+.store-info {
+	padding: 20px;
+	width: 300px;
+	height: 400px;
+	background-color: #faebd7;
+	border-radius: 3px;
+	font-family: 'Jua', sans-serif;
+	margin-bottom: 30px;
+}
+
+.store-picture-wrap {
+	margin-top: 30px;
+	width: 100%;
+}
+
+.store-picture-wrap {
+	margin-top: 30px;
+	width: 100%;
+}
+
+.tm-like-btn {
+	color: white;
+	background-color: #ff5757;
+	height: 40px;
+	border: none;
+	margin-left: -1px;
+	border-radius: 2px;
+}
+
+.href-btns ul li {
+	width: 100%;
+}
+
+.href-btns ul {
+	padding: 0;
+}
+
+.href-btns ul li h2, .href-btns ul li>button, .href-btns ul li,
+	.href-btns ul li a {
+	float: left;
+}
+
+.tm-href-btn, #add-reply-btn, #delete-reply-btn, #modify-reply-btn,
+	#modify-confirm-btn {
+	display: inline-block;
+	color: white;
+	background-color: #ff5757;
+	height: 40px;
+	border: none;
+	margin: 0 auto;
+	border-radius: 2px;
+	font-family: 'Jua', sans-serif;
+	width: 128px;
+}
+
+#add-reply-btn:hover, #delete-reply-btn:hover, #modify-reply-btn:hover,
+	#modify-confirm-btn:hover {
+	border: #ff5757 1px solid;
+}
+
+.reply-card-content {
+	margin-bottom: 15px;
+}
+
+.tm-href-btn2 {
+	color: white;
+	background-color: #ff5757;
+	height: 40px;
+	border: none;
+	margin: 0 auto;
+	border-radius: 2px;
+	font-family: 'Jua', sans-serif;
+	width: 260px
+}
+
+.tm-href-btn:hover, .tm-href-btn2:hover, .tm-like-btn:hover,
+	#add-reply-btn:hover {
+	color: #ff5757;
+	background-color: white;
+	border: 1px solid white;
+}
+
+.section-menu-list{
+	padding-top: 40px;
+	clear: both;
+	width: 100%;
+	background-color:#fff4de;
+}
+
+.menu-list-container {
+	margin: 0 auto;
+	width: 90%;
+}
+
+.menu-card{
+	border-radius: 5px;
+	padding-top: 10px;
+	margin: 0 5px;
+	background-color: white;
+}
+
+.review-container{
+	padding: 30px;
+}
+
+.review-card{
+	padding: 5px;
+	margin: 0, 10px;
+}
+
+.reservation-container {
+	margin: 0 auto;
+	padding-top: 30px;
+}
+
+.reservation-input {
+	width: 100%;
+}
+
+.middle-section-text {
+	color: #aa7835;
+}
+
+.address{
+	margin-bottom: 10px;
+}
+
+.map-container{
+	margin-left: 20px;
+	width: 100%;
+}
+
+.font-Jua{
+	font-family: 'Jua', sans-serif;
+}
